@@ -38,6 +38,7 @@ type Question struct {
 	Id uuid.UUID `json:"id"`
 	Q  string    `json:"q"`
 	A  string    `json:"a"`
+	V  int       `json:"v"`
 
 	Revealed bool `json:"revealed"`
 }
