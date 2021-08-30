@@ -175,6 +175,8 @@ func MakeSetTokenEndpoint() http.HandlerFunc {
 		c := &http.Cookie{
 			Name:  "Authorization",
 			Value: fmt.Sprintf("Token %s", req.Token),
+			SameSite: http.SameSiteNoneMode,
+			Secure: true,
 		}
 		http.SetCookie(w, c)
 	}
@@ -198,8 +200,8 @@ func main() {
 	r.Handle("/set-token", MakeSetTokenEndpoint())
 
 	headersOk := handlers.AllowedHeaders([]string{"*"})
-	originsOk := handlers.AllowedOrigins([]string{"http://localhost:3000"})
+	originsOk := handlers.AllowedOrigins([]string{"http://localhost:3000", "https://jeopardy.bcomp.id"})
 	methodsOk := handlers.AllowedMethods([]string{"GET", "HEAD", "POST", "PUT", "OPTIONS"})
 	credentialsOk := handlers.AllowCredentials()
-	log.Fatal(http.ListenAndServe(":8080", handlers.CORS(headersOk, originsOk, methodsOk, credentialsOk)(r)))
+	log.Fatal(http.ListenAndServe(":80", handlers.CORS(headersOk, originsOk, methodsOk, credentialsOk)(r)))
 }
